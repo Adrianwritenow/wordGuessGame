@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="app.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <form  method="POST">
+        <div class= "gameBox">
+          <div class ='fields'>
+            <input type="text" name="userEntrey" placeholder = "Guess a Letter"/>
+            <button type = "submit">Take a guess</button>
+          </div>
+          <div class ='guessBox'>
+          <ul>
+            {{ #userEntrey }}
+            <li>  {{ guess }} </li>
+            {{ /userEntrey }}
+          </ul>
+          </div>
+          <div class = 'guessCounter'>
+            <h3> {{ guessLeft}}</h3>
+          </div>
+        </div>
+      </form>
+      <div class = wordDisplay>
+        <ul>
+        {{ #randomWord }}
+          <li>{{ . }}</li>
+        {{ /randomWord}}
+      </ul>
+      </div>
+    </div>
+  </body>
+</html>
