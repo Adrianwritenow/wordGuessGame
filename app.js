@@ -82,13 +82,14 @@ app.post('/', function(request, response) {
       userGuess.push(newGuess);
       console.log(userGuess);
 
-      for( i = 0 ; i < randomWord.length;i++){
-        if (randomWord.includes(newGuess.guess)) {
-          console.log('good guess')
-        }else {
-           guessLeft - 1;
-         }
+      if (randomWord.includes(newGuess.guess)) {
+        console.log('good guess')
+      }else {
+         guessLeft= guessLeft - 1;
+         console.log('you have '+ guessLeft+ 'guesses left');
+       }
 
+      for( i = 0 ; i < randomWord.length;i++){
         if (randomWord[i] === newGuess.guess) {
           gameArray[i] = randomWord[i];
           console.log( randomWord[i] + ' is correct');
