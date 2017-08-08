@@ -12,10 +12,12 @@
             <button type = "submit">Take a guess</button>
           </div>
           <div class ='guessBox'>
-          <ul>
-            {{ #userEntrey }}
-            <li>  {{ guess }} </li>
-            {{ /userEntrey }}
+          <ul style="list-style-type:none">
+            <div class = 'guess'>
+              {{ #userEntrey }}
+                <li>  {{ guess }} </li>
+              {{ /userEntrey }}
+            </div>
           </ul>
           </div>
           <div class = 'guessCounter'>
@@ -24,10 +26,13 @@
         </div>
       </form>
       <div class = wordDisplay>
-        <ul>
+        <ul style="list-style-type:none">
+        <div id= "correctLetter">
         {{ #randomWord }}
           <li>{{ . }}</li>
         {{ /randomWord}}
+      </div>
+
       </ul>
       </div>
     </div>

@@ -16,3 +16,16 @@ height: 222px;
 
 
 }
+li{
+  border-bottom: 1px solid grey;
+}
+
+#correctLetter{
+  display: flex;
+  justify-content: space-around;
+}
+
+.guess{
+  display: flex;
+  justify-content: space-between;
+}

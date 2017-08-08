@@ -6,11 +6,11 @@ const expressValidator = require('express-validator');
 const fs = require('fs');
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 
-
-
 var app = express();
 var userGuess = [];
 var gameArray = [];
+let guessLeft = 8;
+
 
 let randomWord = words[Math.floor((Math.random() * 235000))
 ].split('');
@@ -18,8 +18,6 @@ randomWord.forEach(function(letter){
   gameArray.push(" ");
 
 });
-
-
 
 //sets a session
 
@@ -48,15 +46,15 @@ app.use(bodyParser.urlencoded({
 app.use(expressValidator());
 
 app.get('/', function (request,response){
-    response.render('game',{
-      userEntrey: userGuess,
-      randomWord: gameArray
+  response.render('game',{
+    userEntrey: userGuess,
+    randomWord: gameArray
 
   });
     console.log(randomWord);
     console.log(userGuess);
     console.log(gameArray);
-  });
+});
 
 
 app.post('/', function(request, response) {
@@ -71,8 +69,8 @@ app.post('/', function(request, response) {
       },
       errorMessage: 'Please enter a letter'
     }
-
   };
+
   console.log('received letter from form: ' + request.body.userEntrey);
   request.assert(schema);
   request.getValidationResult().then(function(results) {
@@ -84,30 +82,45 @@ app.post('/', function(request, response) {
       userGuess.push(newGuess);
       console.log(userGuess);
 
-      randomWord.forEach(function(letter){
-        if (letter === newGuess.guess) {
+      for( i = 0 ; i < randomWord.length;i++){
+        if (randomWord.includes(newGuess.guess)) {
           console.log('good guess')
+        }else {
+           guessLeft - 1;
+         }
+
+        if (randomWord[i] === newGuess.guess) {
+          gameArray[i] = randomWord[i];
+          console.log( randomWord[i] + ' is correct');
+          console.log(userGuess);
+          console.log(gameArray);
         }else {
           console.log('try again')
         }
-      });
+      }
 
-
+      if (gameArray.join("") === randomWord.join("")) {
+        // response.send("YOU WIN!");
+      }
 
       response.render('game', {
         userEntrey: userGuess,
         randomWord: gameArray
-
-
       });
+
       let count =  userGuess.length;
-      let guessLeft = 8 - count;
-      console.log(count + "guesses");
-      console.log(guessLeft);
+      console.log(guessLeft + "guesses");
       if (guessLeft === 0) {
         console.log('gameOver');
-
-      }
+        // for (var i = 0; i < gameArray.length; i++) {
+        //   if (gameArray[i] === " ") {
+        //     // function(){
+        //     //   let missedLetter = document.getElementbyId('correctLetter');
+        //     //   missedLetter.getElementsByTagName("LI")[i].style.color = "red";
+        //       gameArray[i] = randomWord[i];
+        //     }
+        //   }
+        }
 
     } else {
       response.render('game', {
@@ -116,11 +129,7 @@ app.post('/', function(request, response) {
         errorMessage: results.array()
       });
     }
-
   });
-
-
-
 });
 
 
