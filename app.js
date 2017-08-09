@@ -10,6 +10,7 @@ var app = express();
 var userGuess = [];
 var gameArray = [];
 let guessLeft = 8;
+var result = "";
 
 
 let randomWord = words[Math.floor((Math.random() * 235000))
@@ -47,7 +48,8 @@ app.use(expressValidator());
 app.get('/', function (request,response){
   response.render('game',{
     userEntrey: userGuess,
-    randomWord: gameArray
+    randomWord: gameArray,
+
   });
 
     console.log(randomWord);
@@ -92,7 +94,16 @@ app.post('/', function(request, response) {
          guessLeft= guessLeft - 1;
          console.log('you have '+ guessLeft+ 'guesses left');
          if (guessLeft === 0) {
-           response.send("Game OVER");
+           for (var i = 0; i < gameArray.length; i++) {
+             if (gameArray[i] === " ") {
+                 gameArray[i] = randomWord[i];
+                 console.log(gameArray[i], 'MISSED');
+                //  gameArray[i].style.color ='red';
+               }
+             }
+             response.render('game', {result: 'You Lose',
+              userGuess: userGuess,
+             randomWord: gameArray, });
          }
        }
 
@@ -108,12 +119,18 @@ app.post('/', function(request, response) {
       }
 
       if (gameArray.join("") === randomWord.join("")) {
-        // response.send("YOU WIN!");
+         response.render('game', {result: 'You Win',
+         userGuess: userGuess,
+         randomWord: gameArray,
+       });
+        //  document.getElementById("result").innerHTML = result;
+
       }
 
       response.render('game', {
         userGuess: userGuess,
-        randomWord: gameArray
+        randomWord: gameArray,
+
       });
 
 
@@ -127,10 +144,9 @@ app.post('/', function(request, response) {
         //   }
 
     } else {
-      response.render('game', {
+      response.render('game', result,{
         userGuess: userGuess,
         randomWord: gameArray,
-
         errorMessage: results.array()
       });
     }

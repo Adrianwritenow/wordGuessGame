@@ -19,12 +19,17 @@
               {{ /userGuess }}
             </div>
           </ul>
-          </div>
+        </div>
           <div class = 'guessCounter'>
             <h3> {{ guessLeft}}</h3>
           </div>
         </div>
       </form>
+      <div class = 'result'>
+        {{ #result}}
+        <h1> {{.}} </h1>
+          {{ /result }}
+      </div>
       <div class = wordDisplay>
         <ul style="list-style-type:none">
         <div id= "correctLetter">
