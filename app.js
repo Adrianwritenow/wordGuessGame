@@ -25,7 +25,6 @@ app.use(session({
   secret: "2C44-4D44-WppQ38S",
   resave: false,
   saveUninitialized:true,
-
 }));
 
 //configure mustache with express
@@ -49,8 +48,8 @@ app.get('/', function (request,response){
   response.render('game',{
     userEntrey: userGuess,
     randomWord: gameArray
-
   });
+
     console.log(randomWord);
     console.log(userGuess);
     console.log(gameArray);
@@ -75,25 +74,33 @@ app.post('/', function(request, response) {
   request.assert(schema);
   request.getValidationResult().then(function(results) {
     if (results.isEmpty()) {
-      newGuess = {
-        guess : request.body.userEntrey
-      }
-      console.log(newGuess.guess, "is the newGuess");
-      userGuess.push(newGuess);
-      console.log(userGuess);
+      newGuess =  request.body.userEntrey
 
-      if (randomWord.includes(newGuess.guess)) {
+      console.log(newGuess, "is the newGuess");
+
+      if (userGuess.includes(newGuess)) {
+        console.log('You used that already!');
+        guessLeft = guessLeft + 1;
+      }else {
+        userGuess.push(newGuess);
+        console.log(userGuess, "are your past guesses");
+      }
+
+      if (randomWord.includes(newGuess)) {
         console.log('good guess')
       }else {
          guessLeft= guessLeft - 1;
          console.log('you have '+ guessLeft+ 'guesses left');
+         if (guessLeft === 0) {
+           response.send("Game OVER");
+         }
        }
 
       for( i = 0 ; i < randomWord.length;i++){
-        if (randomWord[i] === newGuess.guess) {
+        if (randomWord[i] === newGuess) {
           gameArray[i] = randomWord[i];
           console.log( randomWord[i] + ' is correct');
-          console.log(userGuess);
+          console.log(userGuess,'are your past guesses too');
           console.log(gameArray);
         }else {
           console.log('try again')
@@ -105,14 +112,11 @@ app.post('/', function(request, response) {
       }
 
       response.render('game', {
-        userEntrey: userGuess,
+        userGuess: userGuess,
         randomWord: gameArray
       });
 
-      let count =  userGuess.length;
-      console.log(guessLeft + "guesses");
-      if (guessLeft === 0) {
-        console.log('gameOver');
+
         // for (var i = 0; i < gameArray.length; i++) {
         //   if (gameArray[i] === " ") {
         //     // function(){
@@ -121,18 +125,17 @@ app.post('/', function(request, response) {
         //       gameArray[i] = randomWord[i];
         //     }
         //   }
-        }
 
     } else {
       response.render('game', {
-        userEntrey: userGuess,
+        userGuess: userGuess,
         randomWord: gameArray,
+
         errorMessage: results.array()
       });
     }
   });
 });
-
 
 app.listen(3000, function(){
   console.log('Server farted');

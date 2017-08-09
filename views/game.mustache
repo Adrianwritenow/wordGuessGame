@@ -14,9 +14,9 @@
           <div class ='guessBox'>
           <ul style="list-style-type:none">
             <div class = 'guess'>
-              {{ #userEntrey }}
-                <li>  {{ guess }} </li>
-              {{ /userEntrey }}
+              {{ #userGuess }}
+                <li>  {{ . }} </li>
+              {{ /userGuess }}
             </div>
           </ul>
           </div>
