@@ -6,6 +6,11 @@
   <body>
     <div class="wrapper">
       <form  method="POST">
+        <div class = 'guessCounter'>
+          {{ #guessLeft }}
+          <h2>You Have {{.}} Guesses Left</h2>
+          {{ /guessLeft }}
+        </div>
         <div class= "gameBox">
           <div class ='fields'>
             <input type="text" name="userEntrey" placeholder = "Guess a Letter"/>
@@ -20,12 +25,12 @@
             </div>
           </ul>
         </div>
-          <div class = 'guessCounter'>
-            <h3> {{ guessLeft}}</h3>
-          </div>
         </div>
       </form>
       <div class = 'result'>
+        {{ #errorMessage }}
+        <h3>{{ . }}</h3>
+        {{ /errorMessage }}
         {{ #result}}
         <h1> {{.}} </h1>
           {{ /result }}

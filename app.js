@@ -49,7 +49,7 @@ app.get('/', function (request,response){
   response.render('game',{
     userEntrey: userGuess,
     randomWord: gameArray,
-
+    guessLeft:guessLeft
   });
 
     console.log(randomWord);
@@ -81,11 +81,15 @@ app.post('/', function(request, response) {
       console.log(newGuess, "is the newGuess");
 
       if (userGuess.includes(newGuess)) {
-        console.log('You used that already!');
+        errorMessage:'You used that already!';
         guessLeft = guessLeft + 1;
+        response.render('game',
+          {errorMessage: 'You used that letter already!',
+          userGuess: userGuess,
+          randomWord: gameArray,
+          guessLeft:guessLeft});
       }else {
         userGuess.push(newGuess);
-        console.log(userGuess, "are your past guesses");
       }
 
       if (randomWord.includes(newGuess)) {
@@ -96,14 +100,17 @@ app.post('/', function(request, response) {
          if (guessLeft === 0) {
            for (var i = 0; i < gameArray.length; i++) {
              if (gameArray[i] === " ") {
-                 gameArray[i] = randomWord[i];
-                 console.log(gameArray[i], 'MISSED');
-                //  gameArray[i].style.color ='red';
+               gameArray[i] = randomWord[i];
+
+                console.log(gameArray[i], 'MISSED');
                }
              }
              response.render('game', {result: 'You Lose',
               userGuess: userGuess,
-             randomWord: gameArray, });
+             randomWord: gameArray,
+             guessLeft:guessLeft,
+
+           });
          }
        }
 
@@ -122,36 +129,31 @@ app.post('/', function(request, response) {
          response.render('game', {result: 'You Win',
          userGuess: userGuess,
          randomWord: gameArray,
+         guessLeft:guessLeft,
        });
-        //  document.getElementById("result").innerHTML = result;
-
       }
 
       response.render('game', {
         userGuess: userGuess,
         randomWord: gameArray,
-
+        guessLeft:guessLeft
       });
 
-
-        // for (var i = 0; i < gameArray.length; i++) {
-        //   if (gameArray[i] === " ") {
-        //     // function(){
-        //     //   let missedLetter = document.getElementbyId('correctLetter');
-        //     //   missedLetter.getElementsByTagName("LI")[i].style.color = "red";
-        //       gameArray[i] = randomWord[i];
-        //     }
-        //   }
-
     } else {
-      response.render('game', result,{
+      console.log(results.array());
+      response.render('game',{
+
         userGuess: userGuess,
         randomWord: gameArray,
-        errorMessage: results.array()
+        guessLeft:guessLeft,
+        errorMessage:results.array()
+
       });
     }
   });
 });
+
+
 
 app.listen(3000, function(){
   console.log('Server farted');
